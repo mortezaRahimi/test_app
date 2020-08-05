@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TestApp</string>
+    <string name="select_your_service_category_and_profession">Select your service category and profession!</string>
+    <string name="general_information">General Information</string>
+    <string name="how_people_may_reach_you">How people may reach you?</string>
+    <string name="online">Online</string>
+    <string name="in_person">In Person</string>
+    <string name="your_services_are_presented_locally">Your services are presented locally.</string>
+</resources>
