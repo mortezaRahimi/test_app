@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.item_cat.view.*
 import kotlinx.android.synthetic.main.sub_cat_item.view.*
 import kotlin.properties.Delegates
 
-class SubCatAdapter : RecyclerView.Adapter<SubCatAdapter.CatViewHolder>() {
+class SubCatAdapter(private val clicled_ :Clicked) : RecyclerView.Adapter<SubCatAdapter.CatViewHolder>() {
 
     // Our data list is going to be notified when we assign a new list of data to it
     private var catsList: List<SubCategory> by Delegates.observable(emptyList()) { _, _, _ ->
@@ -31,7 +31,7 @@ class SubCatAdapter : RecyclerView.Adapter<SubCatAdapter.CatViewHolder>() {
         // Verify if position exists in list
         if (position != RecyclerView.NO_POSITION) {
             val category: SubCategory = catsList[position]
-            holder.bind(category)
+            holder.bind(category,clicled = clicled_)
         }
     }
 
@@ -42,14 +42,16 @@ class SubCatAdapter : RecyclerView.Adapter<SubCatAdapter.CatViewHolder>() {
 
     class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(cat: SubCategory) {
+        fun bind(cat: SubCategory,clicled: Clicked) {
             itemView.sub_cat_name.text = cat.title
-            itemView.setOnClickListener{
-                val intent = Intent(itemView.context, DetailActivity::class.java)
-                intent.putExtra("ANSWER" , cat.title)
-                itemView.context.startActivity(intent)
+            itemView.setOnClickListener {
+                clicled.selected(cat)
             }
         }
     }
 
+}
+
+interface Clicked {
+    fun selected(subCategory: SubCategory)
 }

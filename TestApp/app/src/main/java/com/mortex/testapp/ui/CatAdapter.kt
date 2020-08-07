@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.item_cat.view.*
 import kotlin.properties.Delegates
 
-class CatAdapter : RecyclerView.Adapter<CatAdapter.CatViewHolder>() {
+class CatAdapter(private val clicked_: Clicked) : RecyclerView.Adapter<CatAdapter.CatViewHolder>() {
 
     // Our data list is going to be notified when we assign a new list of data to it
     private var catsList: List<Category> by Delegates.observable(emptyList()) { _, _, _ ->
@@ -28,9 +28,10 @@ class CatAdapter : RecyclerView.Adapter<CatAdapter.CatViewHolder>() {
 
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         // Verify if position exists in list
+        val catAdapter = SubCatAdapter(clicked_)
         if (position != RecyclerView.NO_POSITION) {
             val category: Category = catsList[position]
-            holder.bind(category)
+            holder.bind(category,catAdapter)
         }
     }
 
@@ -40,16 +41,15 @@ class CatAdapter : RecyclerView.Adapter<CatAdapter.CatViewHolder>() {
     }
 
     class CatViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(cat: Category) {
+        fun bind(cat: Category,subCatAdapter: SubCatAdapter) {
             itemView.cat_name.text = cat.title
-            val catAdapter = SubCatAdapter()
             itemView.sub_cat_rv.apply {
                 // Displaying data in a Grid design
                 layoutManager = LinearLayoutManager(itemView.context)
-                adapter = catAdapter
+                adapter = subCatAdapter
             }
 
-            catAdapter.updateData(cat.subCategories)
+            subCatAdapter.updateData(cat.subCategories)
 
             itemView.setOnClickListener {
                 if (itemView.sub_cat_rv.visibility == View.VISIBLE)

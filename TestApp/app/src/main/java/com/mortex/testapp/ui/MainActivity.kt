@@ -1,5 +1,6 @@
 package com.mortex.testapp.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -8,20 +9,21 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mortex.testapp.R
+import com.mortex.testapp.data.model.SubCategory
 import com.mortex.testapp.presentation.MainViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity()  {
+class MainActivity : AppCompatActivity(), Clicked {
 
-    private val viewModel:MainViewModel by viewModel()
+    private val viewModel: MainViewModel by viewModel()
     private lateinit var catAdapter: CatAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        catAdapter = CatAdapter()
+        catAdapter = CatAdapter(this)
         cat_rv.apply {
             // Displaying data in a Grid design
             layoutManager = LinearLayoutManager(this@MainActivity)
@@ -49,4 +51,12 @@ class MainActivity : AppCompatActivity()  {
         // The observers are set, we can now ask API to load a data list
         viewModel.loadCats()
     }
+
+    override fun selected(subCategory: SubCategory) {
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra("ANSWER", subCategory.title)
+        startActivity(intent)
+    }
+
+
 }
